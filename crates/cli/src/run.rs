@@ -1,4 +1,4 @@
-//! Command dispatch. Commands return a `Report`; they never print.
+//! Command dispatch. Every command returns a `Report`; none of them print.
 
 use clap::CommandFactory;
 use serde_json::json;
