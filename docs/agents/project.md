@@ -28,3 +28,5 @@ Cross-repo decisions from keelstackhq/decisions; follow them. To change one, ope
 @docs/agents/org-decisions.md
 
 <!-- splice:decisions:end -->
+
+Canary for hull template-rust: measures the generated CI.
