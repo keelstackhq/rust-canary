@@ -1,0 +1,47 @@
+format = 1
+splice = "0.2.0"
+
+[template]
+source = "gh:keelstackhq/hull//template-rust"
+version = "0.0.0+gd25ab5e"
+commit = "d25ab5e613b77df4078ad06d2275cf7c8bd3d0f8"
+
+[vars]
+
+[[pieces]]
+id = "base"
+name = "base"
+vars = {}
+
+[[pieces]]
+id = "rust-cli"
+name = "cli"
+vars = { name = "cli" }
+
+[files]
+".claude/hooks/guard.mjs" = { class = "owned", sha256 = "4440b47b1fa883ea7365608a5b188d28633be3036b66f1842a28645159f81fc0" }
+".claude/hooks/session-start.sh" = { class = "owned", sha256 = "5f34655c46a6eb839a7244ab49ce1339043d78788b18bec8110136faa2353933" }
+".claude/hooks/stop-checks.sh" = { class = "owned", sha256 = "f98223e8022893fc83b4c1fa484b27dbb21864db16f12de8ec275c072786878a" }
+".claude/loop.md" = { class = "owned", sha256 = "e398c1ea68768b7bc99b24c59827c30c76994ae0a805097b18617b3814f8a548" }
+".claude/settings.json" = { class = "owned", sha256 = "a457f3afd0fb0eab0147b3893e671da1af018a4323c0322d5b0442c566101dbd" }
+".claude/skills/add-piece/SKILL.md" = { class = "owned", sha256 = "66c103cc49e409d9e36d58f32a91aed7fcbdc9f74ba2d2d2ad9e535ae058fe49" }
+".claude/skills/verify/SKILL.md" = { class = "owned", sha256 = "7bcf7d1c8afb8a573c6b56e464607bb11bc92f06b0e366202cadaa03c5ea5322" }
+".claude/statusline.sh" = { class = "owned", sha256 = "64a11fef7527d0fda66333a97403382cac278ca4013a2b597729820f400747e9" }
+".config/nextest.toml" = { class = "owned", sha256 = "729c52a610d6c370138ba27a57315795c3b775131da60dd98389eaece9b691d3" }
+".gitattributes" = { class = "owned", sha256 = "d60f352d0db1404c70afb4bb8b2ca3fd1c610572aa40720e8a0b7baa7885418c" }
+".github/scripts/docs-only.mjs" = { class = "owned", sha256 = "fb52178bee89ea9047a5b86d4072a8f2eb7d4a37fc8a3d7425253a58b58b0691" }
+".github/scripts/release-pending.mjs" = { class = "owned", sha256 = "3d9ec3ae115fcb3c2e27159323970be59afa67733455826b316389e592dfee0d" }
+".github/workflows/ci.yml" = { class = "owned", sha256 = "c5d737e9f669fe16770218ae7cd6079da9c75741b5818f5501e483680cde92d9" }
+".github/workflows/release.yml" = { class = "owned", sha256 = "9d02b292131adb57654edddeda805b679c37300e24f3d3d4c259a1ef7f1f10c4" }
+".github/workflows/splice.yml" = { class = "owned", sha256 = "31cf8bb37b5c4796827ca02ba327a19c0554dc8b95910874e325a0e557a73a47" }
+".gitignore" = { class = "owned", sha256 = "1bdbdf1653804b1ee2c40b205fc54f7f54602181372629d0ea3f04959c73d8f3" }
+"CLAUDE.md" = { class = "owned", sha256 = "f05dea4c3e9e8696f7786f22c94a79eab7ad4146ce861c45f5022f6608ffab8d" }
+"Cargo.toml" = { class = "shared", sha256 = "005658079c5b9851a70aaea5455a6cc11071ec46467732c32f7b3fe0d63c72bd" }
+"crates/cli/AGENTS.md" = { class = "owned", sha256 = "12ec0260713f6fd5a7993a60c4bc9191cff35ce4c2eeb379a0f95039980b24e3" }
+"crates/cli/Cargo.toml" = { class = "shared", sha256 = "e74f091edf887db1344d3c7288f0801f8fc905baa9bb0cd8af5c957ca482f9d0" }
+"crates/common/Cargo.toml" = { class = "shared", sha256 = "bf2ef863f1b8f067ebd7acfe113372f31f31349b76ccc776713275570610e75d" }
+"deny.toml" = { class = "owned", sha256 = "b21f6ea4de5289413eea649d1df750de03b99849b06649f482a9fd262bb7ded3" }
+"renovate.json" = { class = "owned", sha256 = "c903f6676d6f1bf9c4fcdb2b97ce0cbf8fe34d482dddf630180a75794b86d3de" }
+"rust-toolchain.toml" = { class = "owned", sha256 = "c979a7d4d66b770a4d59d6d56e3c078aeab1993af658480bfd1f89f90220457d" }
+"rustfmt.toml" = { class = "owned", sha256 = "903c8aaa927b68e1397573dd6f5da449c2a6c125dc4a8489df2a7cd7a577a1dc" }
+"scripts/agents-index.mjs" = { class = "owned", sha256 = "38107bea44093586556c223aba092ff84fd2f1bf535ce088a4b841fd213102f3" }
