@@ -105,8 +105,9 @@ in bosun's.
 
 F6. **Agent rules outside R-gov.** In a hull repo, `CLAUDE.md` imports `docs/agents/project.md`,
 `docs/agents/index.md` and `docs/agents/org-decisions.md`, and each crate has `AGENTS.md` and
-`CLAUDE.md`. bosun's R-gov lists only the root `AGENTS.md`, `CLAUDE.md` and `REVIEW.md`, so an
-agent PR can change the instructions every later agent reads, at normal risk.
+`CLAUDE.md`. Of the agent-rule files, bosun's R-gov lists only the root `AGENTS.md`, `CLAUDE.md`
+and `REVIEW.md`, so an agent PR can change the instructions every later agent reads, at normal
+risk.
 - Fix (bosun, `channel/pieces/core/files/.bosun/risk.toml.jinja`): add `docs/agents/**`,
   `**/AGENTS.md` and `**/CLAUDE.md` to R-gov.
 
@@ -143,7 +144,8 @@ counts only `docs/`, `.claude/` and root `*.md` as docs.
 
 F12. **Work outside the plan has no bosun path.** This doc is not a plan task, so `bosun pr`, which
 needs a task issue, cannot open its PR. The only entry is `bosun intake`, then a plan amendment PR,
-then a task PR: three PRs for one doc. #12 was opened by hand.
+then a task PR: three PRs for one doc. #12 was opened by hand. risk-check still judged it
+("normal risk") and review-verdict still applied, so only the task bookkeeping is missing.
 - Fix (bosun, `src/cli/pr.rs` and spec §4): `bosun pr --no-task --kind bookkeeping` for changes
   limited to `docs/**`, with a bookkeeping record instead of a lease.
 
