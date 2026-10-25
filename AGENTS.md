@@ -1,6 +1,6 @@
 # Rust workspace
 
-Generated from hull-rust 0.0.0+gd25ab5e: a Cargo workspace, no Node toolchain.
+Generated from hull-rust 0.0.0+ga7ebb3f: a Cargo workspace, no Node toolchain.
 Crates live in `crates/*`; versions, lints and profiles are set in the root `Cargo.toml`.
 
 ## Commands

@@ -3,8 +3,8 @@ splice = "0.2.0"
 
 [template]
 source = "gh:keelstackhq/hull//template-rust"
-version = "0.0.0+gd25ab5e"
-commit = "d25ab5e613b77df4078ad06d2275cf7c8bd3d0f8"
+version = "0.0.0+ga7ebb3f"
+commit = "a7ebb3fef9cef5fe54ea622a8ec9be967a8167a8"
 
 [vars]
 
@@ -23,7 +23,7 @@ vars = { name = "cli" }
 ".claude/hooks/session-start.sh" = { class = "owned", sha256 = "5f34655c46a6eb839a7244ab49ce1339043d78788b18bec8110136faa2353933" }
 ".claude/hooks/stop-checks.sh" = { class = "owned", sha256 = "f98223e8022893fc83b4c1fa484b27dbb21864db16f12de8ec275c072786878a" }
 ".claude/loop.md" = { class = "owned", sha256 = "e398c1ea68768b7bc99b24c59827c30c76994ae0a805097b18617b3814f8a548" }
-".claude/settings.json" = { class = "owned", sha256 = "a457f3afd0fb0eab0147b3893e671da1af018a4323c0322d5b0442c566101dbd" }
+".claude/settings.json" = { class = "owned", sha256 = "b95df80323ab16111b70cb88f1aaceefe3ffd6b25e97662a0212d7bac55d4a0b" }
 ".claude/skills/add-piece/SKILL.md" = { class = "owned", sha256 = "66c103cc49e409d9e36d58f32a91aed7fcbdc9f74ba2d2d2ad9e535ae058fe49" }
 ".claude/skills/verify/SKILL.md" = { class = "owned", sha256 = "7bcf7d1c8afb8a573c6b56e464607bb11bc92f06b0e366202cadaa03c5ea5322" }
 ".claude/statusline.sh" = { class = "owned", sha256 = "64a11fef7527d0fda66333a97403382cac278ca4013a2b597729820f400747e9" }
