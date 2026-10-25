@@ -19,11 +19,14 @@ pub fn run(cli: Cli) -> Result<Report, Error> {
     let name = cli.command.name();
     tracing::debug!(command = name, "running");
     match cli.command {
-        Command::Hello { name: who } => {
+        Command::Hello { name: who, shout } => {
             if who.trim().is_empty() {
                 return Err(Error::Usage("--name must not be empty".to_owned()));
             }
-            let greeting = format!("hello, {who}");
+            let mut greeting = format!("hello, {who}");
+            if shout {
+                greeting = greeting.to_uppercase();
+            }
             Ok(Report::success(
                 name,
                 format!("{greeting}\n"),

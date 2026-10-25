@@ -36,6 +36,9 @@ pub enum Command {
         /// Who to greet
         #[arg(long, default_value = "world")]
         name: String,
+        /// Print the greeting in upper case
+        #[arg(long)]
+        shout: bool,
     },
     /// Print a shell completion script
     Completions {
