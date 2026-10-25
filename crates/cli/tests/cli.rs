@@ -78,6 +78,26 @@ fn hello_takes_a_name() {
 }
 
 #[test]
+fn hello_shout_prints_the_greeting_in_upper_case() {
+    cli()
+        .args(["hello", "--name", "Ada", "--shout"])
+        .assert()
+        .success()
+        .stdout("HELLO, ADA\n");
+}
+
+#[test]
+fn hello_shout_json_reports_the_upper_case_greeting() {
+    let out = cli()
+        .args(["hello", "--name", "Ada", "--shout", "--json"])
+        .assert()
+        .success()
+        .get_output()
+        .clone();
+    assert_eq!(one_object(&out.stdout)["greeting"], "HELLO, ADA");
+}
+
+#[test]
 fn an_empty_name_is_a_usage_error_with_exit_2() {
     let out = cli()
         .args(["hello", "--name", "", "--json"])
