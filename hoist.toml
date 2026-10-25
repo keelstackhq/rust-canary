@@ -2,7 +2,7 @@
 # shows the result. Per-crate `[publish]` lives in crates/<name>/hoist.toml.
 
 [github]
-required_checks = ["ci-ok"]
+required_checks = ["ci-ok", "risk-check", "review-verdict", "main-open", "bosun-ok"]
 
 [release]
 # Defaults: per-package versioning, tags `{name}@{version}`, publishing from the `release`
