@@ -1,0 +1,44 @@
+format = 1
+splice = "0.2.0"
+
+[channel]
+name = "bosun"
+only = []
+exclude = [".github/workflows/splice.yml", "hoist.toml", "deny.toml", "rust-toolchain.toml", ".claude/settings.json"]
+
+[template]
+source = "gh:keelstackhq/bosun//channel"
+version = "0.2.0"
+commit = "5b5bcc66194c9b5cd2f00618120cdf36466e8478"
+
+[vars]
+bosun_version = ""
+own_ci = "1"
+owner = "urbanisierung"
+project = "rust-canary"
+rust_path = "."
+ts_path = "."
+
+[[pieces]]
+id = "core"
+name = "core"
+vars = {}
+
+[[pieces]]
+id = "rust"
+name = "rust"
+vars = {}
+
+[files]
+".bosun/bosun.toml" = { class = "shared", sha256 = "77ae300db8d6a713542c1a632831e6583ecb0b2f064f1d7c301e4234538d6888" }
+".bosun/version" = { class = "owned", sha256 = "1f930dd1f133c1f97a94fe3acb8db34372cf4c01ffdb2b3ff4ca72f9494121e9" }
+".github/workflows/bosun.yml" = { class = "owned", sha256 = "daa9b653c83550423f6568d81503fab8a320062a4470fcc0c5affbf8471a047e" }
+".github/workflows/main-health.yml" = { class = "owned", sha256 = "d1f6f5b7b297c8740d6a587daf312ced0bb24721d4bd788447eb9a7a2d9c831a" }
+".github/workflows/main-open.yml" = { class = "owned", sha256 = "a137c394cfb64dbca540fa9fd4b5bb1902a13354c9fb4af663487257cc29aa0e" }
+".github/workflows/risk.yml" = { class = "owned", sha256 = "c6a81a0fee312ffb3227af8022a89da2855f3dee550135f7344af77987b9b8da" }
+".github/workflows/verdict.yml" = { class = "owned", sha256 = "961e39b8a72f7841bf23051ddf3b571bd45c5dae30a96f886b97b04e4573c4ab" }
+"docs/setup-script.sh" = { class = "owned", sha256 = "1fb4554acb98f373f6b882163bdea67e6ae4281c085e0a15c70a6b82f5a683f8" }
+
+[sections]
+"AGENTS.md" = { sha256 = "5291dfda584d28c3a5a078f8175106e2730d7cd4965b067f687c006667df7a15", created = false }
+"REVIEW.md" = { sha256 = "4d57702f1481b09f185461fe3afc76e93c3bf685a78b35dc3030c6b70b0b0119", created = true }

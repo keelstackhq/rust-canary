@@ -1,0 +1,13 @@
+# Governance and CI need an owner review (spec §8, R-gov and R-ci). Code outside these paths
+# merges through auto-merge after the gates (spec D13).
+/.bosun/              @urbanisierung
+/governance/          @urbanisierung
+/.github/             @urbanisierung
+/.claude/             @urbanisierung
+/.splice/             @urbanisierung
+/hoist.toml           @urbanisierung
+/AGENTS.md            @urbanisierung
+/REVIEW.md            @urbanisierung
+/CLAUDE.md            @urbanisierung
+/deny.toml            @urbanisierung
+/rust-toolchain.toml  @urbanisierung
