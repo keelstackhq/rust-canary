@@ -9,7 +9,9 @@ bosun 0.2.0 from npm, cargo-nextest and cargo-deny from `cargo install --locked`
 
 The whole path works: hull template, bosun setup, a plan task and a feature task, all green, with
 risk-check "normal risk" and a posted review-verdict on both bosun PRs. It took 6 PRs: hull render,
-hull update, bosun setup, plan, feature and this doc.
+hull update, bosun setup, plan, feature and this doc. The weak spots are after the merge: tasks
+never reach the merged state when a human merges (F10), and `bosun pr <task>` can act on the
+wrong PR (F14).
 
 | Step | PR | Outcome |
 | ---- | -- | ------- |
@@ -57,6 +59,11 @@ CI times (GitHub ubuntu-latest, warm cache):
   from the plan's touch paths, and `bosun pr` linked the task and moved it to review.
 
 ## Friction points and fixes
+
+Status: rust-canary pins bosun v0.2.0. Each bosun finding below was checked against bosun main at
+7303091, which includes #217 (result states) and #218 (reap reads the `task-pr` record). All are
+still open there, and #218 does not cover F10, because that record is written only by
+`bosun pr --auto-merge`.
 
 F1. **hull: no update path to an untagged template-rust.** hull v0.3.0 is not tagged. `splice
 update` targets the latest stable tag, v0.2.2, and fails with "no splice.toml at `template-rust`".
@@ -129,11 +136,26 @@ F9. **`bosun doctor` reports "required checks: ok" when nothing enforces them.**
   /repos/{o}/{r}/rules/branches/{default}`). Say "missing" when the required checks are not
   enforced, and "cannot verify" on 403.
 
-F10. **A task keeps its review state label after a manual merge.** #10 was merged by hand, with no
-auto-merge (F3). Plan task #8 is closed but still has the review state label, and `bosun reap`
-reports nothing, because it moves only queued tasks to merged.
-- Fix (bosun, `src/cli/reap.rs`): also move review and fixing tasks whose linked PR merged to
-  merged, and end their leases with reason `merged`.
+F10. **After a manual merge, no bosun command moves the task to merged.** Without a ruleset (F3)
+there is no auto-merge, so the orchestrator merged #10 and #11 by hand. Tasks #8 and #9 are closed
+but keep the review state label, and their leases stay live until they expire. What each command
+did:
+- `bosun pr 9` on the task branch saw the merge (`"merged": true, "pr": 11`) but left
+  `task_state: review`. `sync_merged` (`src/app.rs`) returns early unless the task is `queued`,
+  and only `bosun pr --auto-merge` sets `queued`.
+- `bosun reap`, before and after the leases expired, reported `merged: []` and `reaped: []`. It
+  lists only queued issues (`src/cli/reap.rs`), so the expired lease on closed #8 was not ended
+  either. It did remove this session from the registry (`left`).
+- `bosun result 7 --outcome merged --pr 11` posted the result record on epic #7 but ended no lease
+  (`lease_ended: false`: the lease is on task #9, not on the epic). Epic #7 stays open with the
+  `ready` state, though its only task is merged.
+- Fix (bosun, `src/app.rs` `sync_merged`): accept `review` and `fixing` as well as `queued` when
+  the linked PR is merged. The state table in spec §4 gets a "review → merged: a human merged
+  the PR" row.
+- Fix (bosun, `src/cli/reap.rs`): also check review and fixing tasks, and closed issues with a
+  live lease, and end those leases with reason `merged`.
+- Fix (bosun, `src/cli/result.rs`): with `--outcome merged --pr N`, end this session's leases on
+  the tasks that PR N links, and close the epic when all its tasks are merged.
 
 F11. **No docs-only fast path.** #10 changed one Markdown file under `plans/`. bosun still ran 8
 jobs (69 s wall), and hull's `ci` ran in full (26 s), because `.github/scripts/docs-only.mjs`
@@ -145,20 +167,50 @@ counts only `docs/`, `.claude/` and root `*.md` as docs.
 F12. **Work outside the plan has no bosun path.** This doc is not a plan task, so `bosun pr`, which
 needs a task issue, cannot open its PR. The only entry is `bosun intake`, then a plan amendment PR,
 then a task PR: three PRs for one doc. #12 was opened by hand. risk-check still judged it
-("normal risk") and review-verdict still applied, so only the task bookkeeping is missing.
+("normal risk"), and `verdict comment` works on it like on any PR, so only the task bookkeeping
+is missing.
 - Fix (bosun, `src/cli/pr.rs` and spec §4): `bosun pr --no-task --kind bookkeeping` for changes
   limited to `docs/**`, with a bookkeeping record instead of a lease.
 
 F13. **The label-lock hook refuses any shell command that mentions a state label.**
 `src/core/guard.rs` line 146 refuses every shell segment that contains the state label prefix
 and does not start with `bosun`. A heredoc writing this doc was refused, because the doc names
-the label. The MCP branch of the same guard already judges only label fields, so prose passes
+the label, and so was a read-only `git show … | grep` whose pattern held the label prefix. The MCP branch of the same guard already judges only label fields, so prose passes
 there.
 - Fix (bosun, `src/core/guard.rs` line 146): refuse only label writes, such as `gh issue edit` or
   `gh pr edit` with `--add-label` or `--remove-label`, `gh label`, and `gh api`, `curl` or `http`
   calls to an `/issues/{n}/labels` path, and keep the nested-command check.
 
-F14. **The orchestration prompt asked for superpowers skills that this session did not have.**
+F14. **`bosun pr <task>` acts on the current branch's PR, whatever task it links.** `src/cli/pr.rs`
+(lines 79-117 on main) looks up the PRs whose head is the current branch. When one is open, it uses
+that PR without checking that the PR links the task, and it then moves the task's state.
+Reproduction on rust-canary:
+1. Task #9 has PR #11 (branch `claude/c1-t1-hello-shout`), merged.
+2. `git switch claude/canary-findings` (open PR #12, which links no task).
+3. `bosun pr 9` returns `{"pr":12,"created":false,"head_sha":"14fc979…","task_state":"review"}`,
+   exit 0. `bosun pr 8` returns the same PR #12.
+
+#9 was already in review, so nothing moved here. A task in `claimed`, `building` or `fixing` would
+have moved to `review` on the wrong PR. With `--auto-merge`, bosun would write a `task-pr` record
+naming the wrong PR and turn on auto-merge for it.
+- Fix (bosun, `src/cli/pr.rs`): when the branch's open PR does not link the task
+  (`linked_issues(&p.body)` lacks `n`), refuse with exit 3: "PR #12 on this branch links no task
+  #9; switch to the task's branch, or add `Closes #9` to the PR". Also add a test in
+  `tests/cli_pr.rs` for "open PR on the branch links another task or none".
+
+F15. **Editing a PR's body cancels its bosun gates and leaves a red `bosun-ok`.** `bosun.yml`
+runs on `edited` (for retargeted stacked PRs), and its concurrency group (`bosun-<pr>-<event>`,
+`cancel-in-progress` on `pull_request`) cancels the running gate jobs. The cancelled run's
+`bosun-ok` (`if: always()`) then reports failure on that head. On #12 the edit came 16 s after a
+push. Run 40209956265 was cancelled and posted a red `bosun-ok`, and the run for the edit went
+green after it. With the ruleset in place, the newest check decides, but the PR still shows a
+failure notice, and the edit costs a full gate run.
+- Fix (bosun, `channel/pieces/core/files/.github/workflows/bosun.yml.jinja`): run the jobs on
+  `edited` only when the base changed (`github.event.action != 'edited' ||
+  github.event.changes.base`). In `bosun-ok`, exit 0 with a notice when a needed job was
+  `cancelled` by concurrency and the run's head is no longer current.
+
+F16. **The orchestration prompt asked for superpowers skills that this session did not have.**
 They are not in hull's rigging, so the work went ahead without them. This is not a hull or bosun
 defect.
 
