@@ -6,12 +6,12 @@ set -euo pipefail
 # Pinned tool versions; the bosun channel moves them with its own versions.
 NODE_MAJOR=24
 PNPM_VERSION=12.15.0
-RUST_VERSION=1.97
+RUST_VERSION=1.97 # fallback; the repo's rust-toolchain.toml wins (read below)
 SPLICE_VERSION=0.2.0
 HOIST_VERSION=0.2.0
 BERTH_VERSION=0.1.0
 # The bosun release this repo pins in .bosun/version.
-BOSUN_VERSION=0.2.0
+BOSUN_VERSION=0.2.2
 
 # Node 24 from NodeSource, unless it is already there (the keelstackhq tools ship through npm).
 if ! node --version 2>/dev/null | grep -q "^v${NODE_MAJOR}\."; then
@@ -19,7 +19,18 @@ if ! node --version 2>/dev/null | grep -q "^v${NODE_MAJOR}\."; then
   apt-get install -y nodejs
 fi
 
-# Rust and the cargo tools the gates run.
+# Rust and the cargo tools the gates run. The version is the `channel` of the repo's
+# rust-toolchain.toml (or the legacy rust-toolchain file) when the script runs in a checkout, so gates and sessions share a toolchain.
+for f in "./rust-toolchain.toml" "./rust-toolchain" rust-toolchain.toml rust-toolchain; do
+  [ -f "$f" ] || continue
+  v="$(sed -nE "s/^[[:space:]]*channel[[:space:]]*=[[:space:]]*[\"']([^\"']*)[\"'].*/\1/p" "$f" | head -n1)"
+  # The legacy `rust-toolchain` file may hold just the channel on its first line.
+  if [ -z "$v" ] && [ "${f##*/}" = rust-toolchain ]; then
+    v="$(head -n1 "$f" | tr -d '[:space:]')"
+    printf '%s' "$v" | grep -Eqx '[A-Za-z0-9._-]+' || v=""
+  fi
+  if [ -n "$v" ]; then RUST_VERSION="$v"; break; fi
+done
 rustup toolchain install "${RUST_VERSION}" --profile minimal --component rustfmt,clippy
 rustup default "${RUST_VERSION}"
 cargo install --locked cargo-nextest cargo-deny

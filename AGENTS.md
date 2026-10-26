@@ -63,8 +63,11 @@ the one JSON object it prints (`ok`, `exit_code`, `data`, `error.fix`, `next`). 
 3. Work in your own workspace (`berth up <task>`) with `BOSUN_SESSION=<session>/<task>` set, so
    your lease is told apart from your orchestrator's and from other wave agents'. Run `bosun heartbeat` at least every
    20 minutes while you work.
-4. Test first. Before every push run the gates you touched: `bosun gate fmt`,
-   `bosun gate lint`, `bosun gate test`, `bosun gate deps`, `bosun test-integrity`.
+4. Test first. Before every push run what CI runs, locally:
+   `for g in fmt lint test deps test-integrity; do bosun gate "$g" || break; done`.
+   CI minutes are scarce: push once per PR, when it is done and green locally; do review
+   rounds locally (step 6) and push their fixes together. Do not edit the PR body or title
+   just to retry CI.
 5. `bosun pr <issue>` — opens or reuses the PR and moves the task to review.
 6. Review: a fresh subagent reads `bosun review-pack <pr>` and returns the verdict JSON; post it
    with `bosun verdict post --from -` (in a cloud session, which cannot write statuses:
@@ -86,6 +89,10 @@ the one JSON object it prints (`ok`, `exit_code`, `data`, `error.fix`, `next`). 
 ### Rules
 
 - Change `bosun:state/*` labels only through bosun commands.
+- Never append to CHANGELOG.md or the Done list of docs/PROGRESS.md in a PR: add a one-line
+  fragment `changelog.d/<name>.md` or `docs/progress.d/<name>.md` instead (name: the branch with
+  `/` as `-`), so merging main never conflicts. Before a release, a docs PR to main runs
+  `.bosun/fold-fragments.sh`; the release PR then moves Unreleased under the version.
 - Never skip, delete or weaken a test to get green; test-integrity refuses it.
 - Lessons are not in this file. A review pack carries the lessons that match your files.
 - bosun's own rules and their reasons: https://github.com/keelstackhq/bosun/blob/main/docs/spec.md.

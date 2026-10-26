@@ -1,5 +1,5 @@
 format = 1
-splice = "0.2.0"
+splice = "0.2.1"
 
 [channel]
 name = "bosun"
@@ -8,8 +8,8 @@ exclude = [".github/workflows/splice.yml", "hoist.toml", "deny.toml", "rust-tool
 
 [template]
 source = "gh:keelstackhq/bosun//channel"
-version = "0.2.0"
-commit = "5b5bcc66194c9b5cd2f00618120cdf36466e8478"
+version = "0.2.2"
+commit = "ca78b8a395847dc6a18e4aacdcd515280d91d953"
 
 [vars]
 bosun_version = ""
@@ -31,14 +31,15 @@ vars = {}
 
 [files]
 ".bosun/bosun.toml" = { class = "shared", sha256 = "77ae300db8d6a713542c1a632831e6583ecb0b2f064f1d7c301e4234538d6888" }
-".bosun/version" = { class = "owned", sha256 = "1f930dd1f133c1f97a94fe3acb8db34372cf4c01ffdb2b3ff4ca72f9494121e9" }
-".github/workflows/bosun.yml" = { class = "owned", sha256 = "daa9b653c83550423f6568d81503fab8a320062a4470fcc0c5affbf8471a047e" }
-".github/workflows/main-health.yml" = { class = "owned", sha256 = "d1f6f5b7b297c8740d6a587daf312ced0bb24721d4bd788447eb9a7a2d9c831a" }
-".github/workflows/main-open.yml" = { class = "owned", sha256 = "a137c394cfb64dbca540fa9fd4b5bb1902a13354c9fb4af663487257cc29aa0e" }
+".bosun/fold-fragments.sh" = { class = "owned", sha256 = "12672351defcd1841f4913d976c2aaf14c83aba23fdd7b61b5cafc894f9cb787" }
+".bosun/version" = { class = "owned", sha256 = "998f6b887ed7a6ef44e84210d0237b715bed42ea7254f48dc418afec0a484103" }
+".github/workflows/bosun.yml" = { class = "owned", sha256 = "63f4881b366a1c67aa13170295ac7b14f8c672af71311e34b3b5a28539b55efe" }
+".github/workflows/main-health.yml" = { class = "owned", sha256 = "dd66782459bf2ee1239a4d099a6af67ac5a7810a0d3938c62b3bd92fc949ed80" }
+".github/workflows/main-open.yml" = { class = "owned", sha256 = "ab33fa2b22a6ffdc662c012a662ceaf6f2010ac2ec2bb57a825a84092c5f83d6" }
 ".github/workflows/risk.yml" = { class = "owned", sha256 = "c6a81a0fee312ffb3227af8022a89da2855f3dee550135f7344af77987b9b8da" }
 ".github/workflows/verdict.yml" = { class = "owned", sha256 = "961e39b8a72f7841bf23051ddf3b571bd45c5dae30a96f886b97b04e4573c4ab" }
-"docs/setup-script.sh" = { class = "owned", sha256 = "1fb4554acb98f373f6b882163bdea67e6ae4281c085e0a15c70a6b82f5a683f8" }
+"docs/setup-script.sh" = { class = "owned", sha256 = "867301ccf08409ea30d54a701ac07315eef0096cd8560b22cd4b161fe29388d9" }
 
 [sections]
-"AGENTS.md" = { sha256 = "5291dfda584d28c3a5a078f8175106e2730d7cd4965b067f687c006667df7a15", created = false }
+"AGENTS.md" = { sha256 = "d3bb977f1e54e1f7f0e29fce1361c5b0693c2f2b1ef35181eb9d28afcf448371", created = false }
 "REVIEW.md" = { sha256 = "4d57702f1481b09f185461fe3afc76e93c3bf685a78b35dc3030c6b70b0b0119", created = true }
