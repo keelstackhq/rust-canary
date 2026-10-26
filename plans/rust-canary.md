@@ -19,3 +19,20 @@ review-verdict) on the hull template-rust canary.
 ### Done when
 
 - UC-C1-1: `cli hello --name Ada --shout` prints `HELLO, ADA`, and `--json` reports the same greeting.
+
+## C2: Trim the name
+
+area: canary
+depends: C1
+
+Trial task for bosun 0.2.2 on this repo: `hello` trims the whitespace around `--name`.
+
+### Tasks
+
+- T1: `hello` trims the whitespace around `--name`
+  touch: crates/cli/src/**, crates/cli/tests/**
+  size: 20
+
+### Done when
+
+- UC-C2-1: `cli hello --name "  Ada "` prints `hello, Ada`, and `--json` reports the same greeting.
