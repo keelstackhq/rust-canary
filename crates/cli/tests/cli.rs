@@ -98,6 +98,26 @@ fn hello_shout_json_reports_the_upper_case_greeting() {
 }
 
 #[test]
+fn hello_trims_the_whitespace_around_the_name() {
+    cli()
+        .args(["hello", "--name", "  Ada "])
+        .assert()
+        .success()
+        .stdout("hello, Ada\n");
+}
+
+#[test]
+fn hello_json_reports_the_trimmed_greeting() {
+    let out = cli()
+        .args(["hello", "--name", "  Ada ", "--json"])
+        .assert()
+        .success()
+        .get_output()
+        .clone();
+    assert_eq!(one_object(&out.stdout)["greeting"], "hello, Ada");
+}
+
+#[test]
 fn an_empty_name_is_a_usage_error_with_exit_2() {
     let out = cli()
         .args(["hello", "--name", "", "--json"])

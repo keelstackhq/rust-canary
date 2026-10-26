@@ -20,7 +20,8 @@ pub fn run(cli: Cli) -> Result<Report, Error> {
     tracing::debug!(command = name, "running");
     match cli.command {
         Command::Hello { name: who, shout } => {
-            if who.trim().is_empty() {
+            let who = who.trim();
+            if who.is_empty() {
                 return Err(Error::Usage("--name must not be empty".to_owned()));
             }
             let mut greeting = format!("hello, {who}");
