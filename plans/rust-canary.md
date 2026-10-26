@@ -26,6 +26,7 @@ area: canary
 depends: C1
 
 Trial task for bosun 0.2.2 on this repo: `hello` trims the whitespace around `--name`.
+It came in through `bosun intake` (#15, plan PR #16); this plan task (C2/P) makes T1 ready.
 
 ### Tasks
 
